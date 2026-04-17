@@ -1,0 +1,82 @@
+universe:
+  stocks:
+    enabled: true
+    min_market_cap: 20000000000   # 200亿 USD（美股门槛）
+    max_assets: 800
+  crypto:
+    enabled: true
+    min_market_cap: 10000000000   # 100亿 USD（加密门槛）
+    max_assets: 400
+
+providers:
+  yahoo:
+    timeout_sec: 20
+    max_retries: 4
+    backoff_sec: 1.5
+    user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+  nasdaq:
+    enabled: true
+    timeout_sec: 20
+    max_retries: 3
+    backoff_sec: 1.0
+    user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+  binance:
+    enabled: true
+    base_url: "https://api.binance.com"
+    market_cap_url: "https://www.binance.com/bapi/composite/v1/public/marketing/symbol/list"
+    universe_quote_assets: ["USDT", "FDUSD", "USDC", "BUSD", "TUSD"]
+    universe_fallback_to_coingecko: false
+    timeout_sec: 20
+    max_retries: 4
+    backoff_sec: 1.0
+    user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+    filter_universe: true
+    fallback_to_coingecko: false
+
+runtime:
+  cache_dir: ".cache"
+  stocks_universe_cache_ttl_hours: 24
+
+data:
+  lookback_days: 120
+  request_sleep_sec: 0.05
+
+# 飞书 Webhook 通知（可选）
+# 在飞书群里添加「自定义机器人」，将 webhook 地址填入下方。
+# 留空或删除此节则不发送通知。
+feishu:
+  webhook_url: ""   # "https://open.feishu.cn/open-apis/bot/v2/hook/xxxxxxxx"
+  timeout_sec: 15
+
+rules:
+  # ── 1日涨幅 > 5% ─────────────────────────────────────────────
+  - id: gain_over_pct_1d
+    enabled: true
+    params:
+      lookback_days: 1
+      min_gain_pct: 5
+      use_only_closed_candle: false
+
+  # ── 1周涨幅 > 20% ────────────────────────────────────────────
+  - id: gain_over_pct_7d
+    enabled: true
+    params:
+      lookback_days: 7
+      min_gain_pct: 20
+      use_only_closed_candle: false
+
+  # ── 1月涨幅 > 30% ────────────────────────────────────────────
+  - id: gain_over_pct_30d
+    enabled: true
+    params:
+      lookback_days: 30
+      min_gain_pct: 30
+      use_only_closed_candle: false
+
+  # ── 3月涨幅 > 50% ────────────────────────────────────────────
+  - id: gain_over_pct_90d
+    enabled: true
+    params:
+      lookback_days: 90
+      min_gain_pct: 50
+      use_only_closed_candle: false
