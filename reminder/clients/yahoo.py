@@ -81,13 +81,14 @@ class YahooClient:
                     continue
 
                 sector = str(quote.get("sector") or "").strip() or None
+                industry = str(quote.get("industry") or "").strip() or None
                 assets.append(
                     Asset(
                         symbol=symbol,
                         name=quote.get("shortName") or quote.get("longName") or symbol,
                         asset_type=AssetType.STOCK,
                         market_cap=float(market_cap),
-                        metadata={"source": "yahoo", "sector": sector},
+                        metadata={"source": "yahoo", "sector": sector, "industry": industry},
                     )
                 )
                 seen.add(symbol)

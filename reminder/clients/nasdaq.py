@@ -75,6 +75,7 @@ class NasdaqClient:
                 continue
 
             sector = str(row.get("sector") or "").strip() or None
+            industry = str(row.get("industry") or "").strip() or None
             assets.append(
                 Asset(
                     symbol=symbol,
@@ -85,6 +86,7 @@ class NasdaqClient:
                         "source": "nasdaq",
                         "raw_symbol": raw_symbol,
                         "sector": sector,
+                        "industry": industry,
                     },
                 )
             )

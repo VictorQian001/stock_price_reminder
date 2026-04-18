@@ -87,8 +87,12 @@ _TAG_KEYWORDS: list[tuple[str, str]] = [
 
 
 def _stock_sector(metadata: dict[str, Any]) -> str:
-    raw = str(metadata.get("sector") or "").strip()
-    return _SECTOR_ZH.get(raw, raw) if raw else "其他"
+    # 优先用细分 industry，回退 sector
+    industry = str(metadata.get("industry") or "").strip()
+    if industry:
+        return industry
+    sector = str(metadata.get("sector") or "").strip()
+    return _SECTOR_ZH.get(sector, sector) if sector else "其他"
 
 
 def _crypto_category(metadata: dict[str, Any]) -> str:
