@@ -80,12 +80,14 @@ class YahooClient:
                 if market_cap is None or market_cap < min_market_cap:
                     continue
 
+                sector = str(quote.get("sector") or "").strip() or None
                 assets.append(
                     Asset(
                         symbol=symbol,
                         name=quote.get("shortName") or quote.get("longName") or symbol,
                         asset_type=AssetType.STOCK,
                         market_cap=float(market_cap),
+                        metadata={"source": "yahoo", "sector": sector},
                     )
                 )
                 seen.add(symbol)

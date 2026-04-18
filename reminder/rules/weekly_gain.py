@@ -78,5 +78,6 @@ class WeeklyGainOverPctRule(Rule):
                 "gain_pct": round(gain_pct, 4),
                 "min_gain_pct": self.min_gain_pct,
                 "min_market_cap": self.min_market_cap,
+                "metadata": dict(asset.metadata),
             },
         )

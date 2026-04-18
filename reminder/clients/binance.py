@@ -80,6 +80,9 @@ class BinanceClient:
                 continue
 
             name = str(row.get("fullName") or row.get("name") or base_asset).strip() or base_asset
+            # tags 是 Binance marketing API 返回的分类数组，如 ["layer-1", "pow"]
+            raw_tags = row.get("tags")
+            tags: list[str] = [str(t).strip() for t in raw_tags if str(t).strip()] if isinstance(raw_tags, list) else []
             assets.append(
                 Asset(
                     symbol=binance_symbol,
@@ -91,6 +94,7 @@ class BinanceClient:
                         "quote_asset": quote_asset,
                         "binance_symbol": binance_symbol,
                         "market_cap_source": "binance",
+                        "tags": tags,
                     },
                 )
             )

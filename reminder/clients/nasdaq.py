@@ -74,13 +74,18 @@ class NasdaqClient:
             if country and "united states" not in country and country not in {"usa", "us"}:
                 continue
 
+            sector = str(row.get("sector") or "").strip() or None
             assets.append(
                 Asset(
                     symbol=symbol,
                     name=str(row.get("name") or symbol),
                     asset_type=AssetType.STOCK,
                     market_cap=market_cap,
-                    metadata={"source": "nasdaq", "raw_symbol": raw_symbol},
+                    metadata={
+                        "source": "nasdaq",
+                        "raw_symbol": raw_symbol,
+                        "sector": sector,
+                    },
                 )
             )
             seen.add(symbol)
